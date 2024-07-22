@@ -1,5 +1,3 @@
-const Command = require('./command.js');
-const Message = require('./message.js');
 
 class Rover {
    // Write code here!
@@ -12,9 +10,12 @@ class Rover {
       let resultArray = [];
       for(let i=0 ; i < msgObj.commands.length; i++){
          if (msgObj.commands[i].commandType === "MOVE"){
-            // msgObj.commands[i].value = this.position;
+            if(this.mode === 'LOW_POWER'){
+               resultArray[i] = {completed: false};
+            }else{
             this.position = msgObj.commands[i].value;
             resultArray[i] = {completed: true};
+            }
          }
 
          if (msgObj.commands[i].commandType === "STATUS_CHECK"){
@@ -40,11 +41,6 @@ class Rover {
    }
 }
 
-let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')];
-let msg = new Message('Test message with two commands', commands);
-let rover = new Rover(98382);
-let response = rover.receiveMessage(msg);
 
-console.log(response);
 
 module.exports = Rover;
